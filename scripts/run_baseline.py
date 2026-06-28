@@ -45,8 +45,8 @@ for d in [OUT_DIR, METRICS_DIR, ANIM_DIR]:
 
 RIFE_REPO = "https://github.com/hzwer/Practical-RIFE.git"
 
-# Google Drive file ID for Practical-RIFE HDv3 weights
-WEIGHTS_GDRIVE_ID = "1mUK9iON6Es14oK46-cTflJUex5nE_6Rl"
+# Google Drive file ID for Practical-RIFE v4.25 (avoids quota limit of older versions)
+WEIGHTS_GDRIVE_ID = "1ZKjcbmt1hypiFprJPIKW0Tt0lr_2i7bg"
 
 
 # ── setup RIFE ────────────────────────────────────────────────────────────────
@@ -75,7 +75,7 @@ def download_weights():
         url = f"https://drive.google.com/uc?id={WEIGHTS_GDRIVE_ID}"
         zip_path = RIFE_DIR / "train_log.zip"
         print(f"  Downloading weights via gdown ...")
-        gdown.download(url, str(zip_path), quiet=False)
+        gdown.download(url, str(zip_path), quiet=False, fuzzy=True)
         shutil.unpack_archive(str(zip_path), str(RIFE_DIR))
         zip_path.unlink(missing_ok=True)
         print("  Weights extracted.")
