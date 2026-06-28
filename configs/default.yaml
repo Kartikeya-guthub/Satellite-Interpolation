@@ -1,0 +1,32 @@
+# Default project configuration
+# Override per-experiment by passing --config path/to/config.yaml
+
+project: satellite-interpolation-frequency-aware
+
+data:
+  raw_dir:        data/raw
+  processed_dir:  data/processed
+  train_dir:      data/train
+  val_dir:        data/validation
+  test_dir:       data/test
+  channel:        CMI_C13        # GOES-19 ABI channel (10.3 µm IR)
+  t_min:          200.0          # brightness temperature range (K)
+  t_max:          310.0
+  tile_size:      256
+  overlap:        32
+
+model:
+  name:           rife
+  pretrained:     models/rife/pretrained.pth
+
+training:
+  epochs:         30
+  batch_size:     8
+  lr:             1.0e-4
+  checkpoint_dir: models/checkpoints
+
+inference:
+  output_dir:     outputs/finetuned
+
+drive:
+  root:           /content/drive/MyDrive/SatelliteInterpolation
