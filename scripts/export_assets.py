@@ -30,6 +30,7 @@ ROOT         = Path(__file__).resolve().parents[1]
 RIFE_DIR     = ROOT / "models" / "rife"
 RAW_DIR      = ROOT / "data" / "raw"
 FINETUNE_DIR = ROOT / "models" / "finetuned"
+WEIGHTS_DIR  = RIFE_DIR / "train_log"
 ANIM_DIR     = ROOT / "outputs" / "animations"
 
 ANIM_DIR.mkdir(parents=True, exist_ok=True)
@@ -43,7 +44,7 @@ def load_rife_model(weights_path: Path, device):
         from train_log.RIFE_HD import Model
 
     model = Model()
-    model.load_model(str(weights_path.parent), -1)
+    model.load_model(str(WEIGHTS_DIR), -1)
     
     import torch
     # Override with our fine-tuned weights if they exist

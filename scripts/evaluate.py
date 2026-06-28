@@ -52,7 +52,7 @@ def load_rife_model(weights_path: Path, device):
             from train_log.RIFE_HDv2 import Model
 
     model = Model()
-    model.load_model(str(weights_path.parent), -1)
+    model.load_model(str(WEIGHTS_DIR), -1)
 
     import torch
     if weights_path.name != "flownet.pkl" and weights_path.exists():
