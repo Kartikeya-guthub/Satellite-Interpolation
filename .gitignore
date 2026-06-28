@@ -29,8 +29,9 @@ models/finetuned/
 *.pt
 *.ckpt
 
-# Outputs
-outputs/
+# Outputs (excluding evaluation assets needed for Streamlit app)
+outputs/*
+!outputs/evaluation/
 
 # Environment / secrets
 .env

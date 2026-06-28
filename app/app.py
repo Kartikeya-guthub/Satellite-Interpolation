@@ -13,6 +13,59 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# ── Glassmorphism Styling ─────────────────────────────────────────────────────
+st.markdown("""
+<style>
+/* Main Background */
+.stApp {
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+    background-attachment: fixed;
+    color: #c9d1d9;
+}
+
+/* Glassmorphic Sidebar */
+[data-testid="stSidebar"] {
+    background: rgba(22, 27, 34, 0.4) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Glassmorphic Metric Cards */
+[data-testid="stMetricValue"], [data-testid="stMetricLabel"], [data-testid="stMetricDelta"] {
+    color: #e6edf3 !important;
+}
+div[data-testid="metric-container"] {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease-in-out;
+}
+div[data-testid="metric-container"]:hover {
+    transform: translateY(-5px);
+}
+
+/* Glassmorphic Image Panels */
+img {
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* Headers */
+h1, h2, h3 {
+    background: -webkit-linear-gradient(45deg, #58a6ff, #a371f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+}
+</style>
+""", unsafe_allow_html=True)
+
 # ── paths ─────────────────────────────────────────────────────────────────────
 ROOT = Path(__file__).resolve().parents[1]
 EVAL_DIR = ROOT / "outputs" / "evaluation"
