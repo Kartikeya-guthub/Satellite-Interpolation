@@ -398,9 +398,12 @@ def main():
     print("\n[1] Loading RIFE model ...")
     sys.path.insert(0, str(RIFE_DIR))
     try:
-        from model.RIFE_HDv3 import Model
+        from train_log.RIFE_HDv3 import Model
     except ImportError:
-        from model.RIFE_HD import Model
+        try:
+            from train_log.RIFE_HD import Model
+        except ImportError:
+            from train_log.RIFE_HDv2 import Model
 
     model = Model()
     model.load_model(str(RIFE_DIR), -1)
