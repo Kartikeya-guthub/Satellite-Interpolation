@@ -406,7 +406,7 @@ def main():
             from train_log.RIFE_HDv2 import Model
 
     model = Model()
-    model.load_model(str(RIFE_DIR), -1)
+    model.load_model(str(RIFE_DIR / "train_log"), -1)
     model.train()
 
     # ── datasets ───────────────────────────────────────────────────────────
