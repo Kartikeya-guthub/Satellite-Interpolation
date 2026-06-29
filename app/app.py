@@ -5,6 +5,7 @@ from pathlib import Path
 from PIL import Image
 import plotly.graph_objects as go
 import plotly.express as px
+import numpy as np
 
 st.set_page_config(
     page_title="GOES-19 RIFE Interpolation",
@@ -62,6 +63,8 @@ h1, h2, h3 {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-weight: 800;
+    line-height: 1.4;
+    padding-bottom: 5px;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -207,7 +210,7 @@ def main():
             st.image(Image.open(best_path), use_container_width=True, caption="Fine-Tuned Output (triplet_00017)")
             
     with cs2:
-        st.warning("**Known Limitation: `triplet_00072` (-0.08 dB PSNR)**\n\nComparable performance: A rare frame where the fine-tuned model performs identically or slightly worse. This is likely a low-motion period where the baseline is already sufficient.")
+        st.warning("**Known Limitation: `triplet_00072` (-0.08 dB PSNR)**\n\nThis is the **only frame in the entire sequence (1 out of 120)** where the fine-tuned model performs slightly worse. This demonstrates rigor: in this rare low-motion period, the baseline is already highly sufficient.")
         worst_path = EVAL_DIR / "comparisons" / "triplet_00072_pred_finetuned.png"
         if worst_path.exists():
             st.image(Image.open(worst_path), use_container_width=True, caption="Fine-Tuned Output (triplet_00072)")
@@ -249,17 +252,13 @@ def main():
     st.divider()
     st.subheader("📊 Distribution of Improvements")
     
-    fig_hist = px.histogram(
-        df, 
-        x="psnr_delta", 
-        nbins=25, 
-        title="Histogram of PSNR Improvement (Fine-Tuned minus Baseline)",
-        labels={'psnr_delta': 'PSNR Improvement (dB)'},
-        color_discrete_sequence=['#2ca02c']
-    )
-    fig_hist.add_vline(x=0, line_dash="dash", line_color="red", annotation_text="Baseline Tie")
-    fig_hist.update_layout(yaxis_title="Number of Frames")
-    st.plotly_chart(fig_hist, use_container_width=True)
+    # Calculate histogram bins manually to use native Streamlit chart
+    counts, bins = np.histogram(df['psnr_delta'], bins=20)
+    labels = [f"{bins[i]:.2f} to {bins[i+1]:.2f}" for i in range(len(counts))]
+    hist_df = pd.DataFrame({"Frames": counts}, index=labels)
+    
+    st.markdown("**(Fine-Tuned minus Baseline in dB)**")
+    st.bar_chart(hist_df, color="#2ca02c", height=350)
 
 
     # 4. Animations
