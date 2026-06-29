@@ -120,7 +120,7 @@ def main():
     # ── Main Content ──────────────────────────────────────────────────────────
     
     # 1. Metrics Cards
-    st.subheader(f"Metrics for Frame: `{selected_frame}`")
+    st.subheader(f"Metrics for Frame: {selected_frame}")
     
     col1, col2, col3 = st.columns(3)
     
