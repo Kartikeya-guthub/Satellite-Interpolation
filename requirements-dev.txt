@@ -1,0 +1,33 @@
+# Core scientific
+numpy
+pandas
+matplotlib
+tqdm
+pyyaml
+
+# Computer vision
+opencv-python
+Pillow
+scikit-image
+scikit-learn
+
+# Deep Learning
+torch
+torchvision
+
+# Satellite / geospatial data
+goes2go
+s3fs
+xarray
+netCDF4
+h5netcdf
+rasterio
+geopandas
+
+# Visualization & App
+streamlit
+plotly
+gradio
+
+# Utilities
+requests
