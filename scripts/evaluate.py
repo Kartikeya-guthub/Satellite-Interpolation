@@ -196,17 +196,18 @@ def evaluate(test_dir: Path, limit: int, device):
         heat_base = generate_heatmap(pred_base, gt_arr)
         heat_ft   = generate_heatmap(pred_ft, gt_arr)
         
-        # Save individual images for dashboard
-        Image.fromarray(img0_arr, "L").save(OUT_DIR / "comparisons" / f"{tri.name}_input.png")
-        Image.fromarray(gt_arr, "L").save(OUT_DIR / "comparisons" / f"{tri.name}_gt.png")
-        Image.fromarray(pred_base, "L").save(OUT_DIR / "comparisons" / f"{tri.name}_pred_baseline.png")
-        Image.fromarray(pred_ft, "L").save(OUT_DIR / "comparisons" / f"{tri.name}_pred_finetuned.png")
-        Image.fromarray(heat_base).save(OUT_DIR / "heatmaps" / f"{tri.name}_heat_baseline.png")
-        Image.fromarray(heat_ft).save(OUT_DIR / "heatmaps" / f"{tri.name}_heat_finetuned.png")
-
-        # Save composite image
-        cmp_path = OUT_DIR / "comparisons" / f"{tri.name}_panel.png"
-        save_comparison_image(img0_arr, gt_arr, pred_base, pred_ft, heat_base, heat_ft, cmp_path)
+        # Save individual images for dashboard (only for first 20 frames to avoid file bloat)
+        if i < 20:
+            Image.fromarray(img0_arr, "L").save(OUT_DIR / "comparisons" / f"{tri.name}_input.png")
+            Image.fromarray(gt_arr, "L").save(OUT_DIR / "comparisons" / f"{tri.name}_gt.png")
+            Image.fromarray(pred_base, "L").save(OUT_DIR / "comparisons" / f"{tri.name}_pred_baseline.png")
+            Image.fromarray(pred_ft, "L").save(OUT_DIR / "comparisons" / f"{tri.name}_pred_finetuned.png")
+            Image.fromarray(heat_base).save(OUT_DIR / "heatmaps" / f"{tri.name}_heat_baseline.png")
+            Image.fromarray(heat_ft).save(OUT_DIR / "heatmaps" / f"{tri.name}_heat_finetuned.png")
+    
+            # Save composite image
+            cmp_path = OUT_DIR / "comparisons" / f"{tri.name}_panel.png"
+            save_comparison_image(img0_arr, gt_arr, pred_base, pred_ft, heat_base, heat_ft, cmp_path)
 
         base_anim_frames.append(pred_base)
         ft_anim_frames.append(pred_ft)
