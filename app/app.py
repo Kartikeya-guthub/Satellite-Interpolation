@@ -87,7 +87,7 @@ def load_data():
 
 
 def main():
-    st.title("🛰️ GOES-19 Satellite Frame Interpolation")
+    st.title("GOES-19 Satellite Frame Interpolation")
     st.markdown("Evaluating RIFE (Real-Time Intermediate Flow Estimation) for tracking cloud dynamics via zero-shot vs fine-tuned architectures.")
 
     df, summary = load_data()
@@ -101,7 +101,7 @@ def main():
     frames = df["frame"].tolist()
     
     # 1. Summary Stats Table
-    st.subheader("📈 Overall Sequence Performance")
+    st.subheader("Overall Sequence Performance")
     
     # Calculate win percentage
     df['psnr_delta'] = df['finetuned_psnr'] - df['baseline_psnr']
@@ -116,7 +116,7 @@ def main():
 
     # ── Sidebar ───────────────────────────────────────────────────────────────
     with st.sidebar:
-        st.header("⚙️ Configuration")
+        st.header("Configuration")
         model_choice = st.radio(
             "Select Model:",
             options=["Baseline RIFE", "Frequency Fine-Tuned RIFE"],
@@ -126,11 +126,6 @@ def main():
         prefix = "finetuned" if is_finetuned else "baseline"
 
         st.divider()
-        st.header("🎞️ Timeline")
-        frame_idx = st.slider("Select Frame:", min_value=0, max_value=len(frames)-1, value=0)
-        selected_frame = frames[frame_idx]
-        
-        st.divider()
         st.markdown("""
         **About the Models**
         - **Baseline**: Zero-shot HDv4.25 pre-trained on Vimeo90K.
@@ -139,6 +134,11 @@ def main():
         """)
 
     # ── Main Content ──────────────────────────────────────────────────────────
+    
+    st.divider()
+    st.subheader("Interactive Timeline Controls")
+    frame_idx = st.slider("Select Sequence Frame:", min_value=0, max_value=len(frames)-1, value=0, help="Drag to explore different frames in the sequence.")
+    selected_frame = frames[frame_idx]
     
     # 1. Metrics Cards
     st.subheader(f"Metrics for Frame: {selected_frame}")
@@ -250,7 +250,7 @@ def main():
 
     # 3.5 Distribution Histogram
     st.divider()
-    st.subheader("📊 Distribution of Improvements")
+    st.subheader("Distribution of Improvements")
     
     # Calculate histogram bins manually to use native Streamlit chart
     counts, bins = np.histogram(df['psnr_delta'], bins=20)
@@ -263,7 +263,7 @@ def main():
 
     # 4. Animations
     st.divider()
-    st.subheader("🎥 Sequence Animations")
+    st.subheader("Sequence Animations")
     
     ac1, ac2 = st.columns(2)
     
@@ -281,7 +281,7 @@ def main():
             st.image(str(anim_ft), use_container_width=True)
             
     st.divider()
-    st.subheader("🔥 Heatmap Animations")
+    st.subheader("Heatmap Animations")
     st.markdown("Watching the error map evolve over time reveals how the fine-tuned model consistently suppresses high-frequency boundary errors as clouds shift.")
     
     hc1, hc2 = st.columns(2)
