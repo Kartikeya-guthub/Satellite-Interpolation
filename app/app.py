@@ -92,6 +92,9 @@ def main():
         st.error(f"❌ Evaluation data not found at `{EVAL_DIR}`. Please run Phase 6 (`evaluate.py`) on Colab and download the `outputs/` folder to your local machine.")
         st.stop()
 
+    avg_psnr_gain = summary['finetuned']['psnr'] - summary['baseline']['psnr']
+    st.success(f"**Key Takeaway**: The fine-tuned model reduces prediction error (average **+{avg_psnr_gain:.2f} dB PSNR**) and produces visibly sharper cloud boundaries than the baseline RIFE model on this sequence.")
+
     frames = df["frame"].tolist()
 
     # ── Sidebar ───────────────────────────────────────────────────────────────
@@ -115,6 +118,7 @@ def main():
         **About the Models**
         - **Baseline**: Zero-shot HDv4.25 pre-trained on Vimeo90K.
         - **Fine-Tuned**: Adapted to GOES-19 imagery using custom FFT Magnitude Loss to preserve high-frequency cloud boundary structures.
+        - **Inference Speed**: ~159 ms/frame on Tesla T4.
         """)
 
     # ── Main Content ──────────────────────────────────────────────────────────
@@ -175,6 +179,24 @@ def main():
             st.image(Image.open(heat_path), use_container_width=True)
         else:
             st.warning("Missing image")
+
+
+    # 2.5 Case Studies
+    st.divider()
+    st.subheader("🔍 Highlighted Case Studies")
+    cs1, cs2 = st.columns(2)
+    
+    with cs1:
+        st.info("**Best Case: `triplet_00017` (+2.25 dB PSNR)**\n\nNoticeable visual improvement: The fine-tuned model preserves the crisp, high-frequency edges of the cloud formations, avoiding the heavy blurring seen in the baseline.")
+        best_path = EVAL_DIR / "comparisons" / "triplet_00017_pred_finetuned.png"
+        if best_path.exists():
+            st.image(Image.open(best_path), use_container_width=True, caption="Fine-Tuned Output (triplet_00017)")
+            
+    with cs2:
+        st.warning("**Known Limitation: `triplet_00072` (-0.08 dB PSNR)**\n\nComparable performance: A rare frame where the fine-tuned model performs identically or slightly worse. This is likely a low-motion period where the baseline is already sufficient.")
+        worst_path = EVAL_DIR / "comparisons" / "triplet_00072_pred_finetuned.png"
+        if worst_path.exists():
+            st.image(Image.open(worst_path), use_container_width=True, caption="Fine-Tuned Output (triplet_00072)")
 
 
     # 3. Trend Graph
