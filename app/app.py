@@ -137,7 +137,7 @@ def main():
     
     st.divider()
     st.subheader("Interactive Timeline Controls")
-    frame_idx = st.slider("Select Sequence Frame:", min_value=0, max_value=len(frames)-1, value=0, help="Drag to explore different frames in the sequence.")
+    frame_idx = st.slider("Select Sequence Frame:", min_value=0, max_value=len(frames)-1, value=17, help="Drag to explore different frames in the sequence.")
     selected_frame = frames[frame_idx]
     
     # 1. Metrics Cards
