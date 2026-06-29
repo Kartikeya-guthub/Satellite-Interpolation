@@ -269,7 +269,7 @@ def main():
         st.subheader("Sequence Animations")
     with col_toggle:
         st.write("") # align vertically
-        pause_anim = st.toggle("⏸️ Pause (Show Selected Frame)", value=False, help="Pause animations and inspect the frame currently selected in the Timeline.")
+        pause_anim = st.toggle("⏸️ Stop GIFs & Show Timeline Frame", value=False, help="Web browsers cannot pause GIFs mid-cycle. This toggle swaps the GIFs out for the static high-res frame you currently have selected in the Timeline slider above!")
     
     ac1, ac2 = st.columns(2)
     
