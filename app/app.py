@@ -96,6 +96,20 @@ def main():
     st.success(f"**Key Takeaway**: The fine-tuned model reduces prediction error (average **+{avg_psnr_gain:.2f} dB PSNR**) and produces visibly sharper cloud boundaries than the baseline RIFE model on this sequence.")
 
     frames = df["frame"].tolist()
+    
+    # 1. Summary Stats Table
+    st.subheader("📈 Overall Sequence Performance")
+    
+    # Calculate win percentage
+    df['psnr_delta'] = df['finetuned_psnr'] - df['baseline_psnr']
+    wins = len(df[df['psnr_delta'] > 0])
+    total = len(df)
+    
+    sc1, sc2, sc3 = st.columns(3)
+    sc1.metric("Avg PSNR", f"{summary['finetuned']['psnr']:.2f} dB", delta=f"{avg_psnr_gain:+.2f} dB vs Baseline")
+    sc2.metric("Avg SSIM", f"{summary['finetuned']['ssim']:.4f}", delta=f"{summary['finetuned']['ssim'] - summary['baseline']['ssim']:+.4f} vs Baseline")
+    sc3.metric("Fine-Tuned Win Rate", f"{(wins/total)*100:.0f}%", delta=f"{wins} out of {total} frames improved", delta_color="normal")
+
 
     # ── Sidebar ───────────────────────────────────────────────────────────────
     with st.sidebar:
@@ -231,6 +245,22 @@ def main():
     
     st.plotly_chart(fig, use_container_width=True)
 
+    # 3.5 Distribution Histogram
+    st.divider()
+    st.subheader("📊 Distribution of Improvements")
+    
+    fig_hist = px.histogram(
+        df, 
+        x="psnr_delta", 
+        nbins=25, 
+        title="Histogram of PSNR Improvement (Fine-Tuned minus Baseline)",
+        labels={'psnr_delta': 'PSNR Improvement (dB)'},
+        color_discrete_sequence=['#2ca02c']
+    )
+    fig_hist.add_vline(x=0, line_dash="dash", line_color="red", annotation_text="Baseline Tie")
+    fig_hist.update_layout(yaxis_title="Number of Frames")
+    st.plotly_chart(fig_hist, use_container_width=True)
+
 
     # 4. Animations
     st.divider()
@@ -250,7 +280,24 @@ def main():
         st.markdown("**Fine-Tuned Animation**")
         if anim_ft.exists():
             st.image(str(anim_ft), use_container_width=True)
-
+            
+    st.divider()
+    st.subheader("🔥 Heatmap Animations")
+    st.markdown("Watching the error map evolve over time reveals how the fine-tuned model consistently suppresses high-frequency boundary errors as clouds shift.")
+    
+    hc1, hc2 = st.columns(2)
+    heat_anim_base = EVAL_DIR / "animations" / "heatmap_baseline.gif"
+    heat_anim_ft = EVAL_DIR / "animations" / "heatmap_finetuned.gif"
+    
+    with hc1:
+        st.markdown("**Baseline Heatmap**")
+        if heat_anim_base.exists():
+            st.image(str(heat_anim_base), use_container_width=True)
+            
+    with hc2:
+        st.markdown("**Fine-Tuned Heatmap**")
+        if heat_anim_ft.exists():
+            st.image(str(heat_anim_ft), use_container_width=True)
 
 if __name__ == "__main__":
     main()
