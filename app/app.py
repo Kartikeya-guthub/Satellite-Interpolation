@@ -263,21 +263,34 @@ def main():
 
     # 4. Animations
     st.divider()
-    st.subheader("Sequence Animations")
+    
+    col_anim, col_toggle = st.columns([3, 1])
+    with col_anim:
+        st.subheader("Sequence Animations")
+    with col_toggle:
+        st.write("") # align vertically
+        pause_anim = st.toggle("⏸️ Pause (Show Selected Frame)", value=False, help="Pause animations and inspect the frame currently selected in the Timeline.")
     
     ac1, ac2 = st.columns(2)
     
     anim_base = EVAL_DIR / "animations" / "baseline.gif"
     anim_ft = EVAL_DIR / "animations" / "finetuned.gif"
     
+    static_base = EVAL_DIR / "comparisons" / f"{selected_frame}_pred_baseline.png"
+    static_ft = EVAL_DIR / "comparisons" / f"{selected_frame}_pred_finetuned.png"
+    
     with ac1:
         st.markdown("**Baseline Animation**")
-        if anim_base.exists():
+        if pause_anim and static_base.exists():
+            st.image(str(static_base), use_container_width=True)
+        elif anim_base.exists():
             st.image(str(anim_base), use_container_width=True)
             
     with ac2:
         st.markdown("**Fine-Tuned Animation**")
-        if anim_ft.exists():
+        if pause_anim and static_ft.exists():
+            st.image(str(static_ft), use_container_width=True)
+        elif anim_ft.exists():
             st.image(str(anim_ft), use_container_width=True)
             
     st.divider()
@@ -288,14 +301,21 @@ def main():
     heat_anim_base = EVAL_DIR / "animations" / "heatmap_baseline.gif"
     heat_anim_ft = EVAL_DIR / "animations" / "heatmap_finetuned.gif"
     
+    static_heat_base = EVAL_DIR / "heatmaps" / f"{selected_frame}_heat_baseline.png"
+    static_heat_ft = EVAL_DIR / "heatmaps" / f"{selected_frame}_heat_finetuned.png"
+    
     with hc1:
         st.markdown("**Baseline Heatmap**")
-        if heat_anim_base.exists():
+        if pause_anim and static_heat_base.exists():
+            st.image(str(static_heat_base), use_container_width=True)
+        elif heat_anim_base.exists():
             st.image(str(heat_anim_base), use_container_width=True)
             
     with hc2:
         st.markdown("**Fine-Tuned Heatmap**")
-        if heat_anim_ft.exists():
+        if pause_anim and static_heat_ft.exists():
+            st.image(str(static_heat_ft), use_container_width=True)
+        elif heat_anim_ft.exists():
             st.image(str(heat_anim_ft), use_container_width=True)
 
 if __name__ == "__main__":
