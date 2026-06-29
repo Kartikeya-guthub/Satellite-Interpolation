@@ -158,21 +158,21 @@ def main():
     with c1:
         st.markdown("**Ground Truth (Middle Frame)**")
         if gt_path.exists():
-            st.image(Image.open(gt_path), use_column_width=True)
+            st.image(Image.open(gt_path), use_container_width=True)
         else:
             st.warning("Missing image")
 
     with c2:
         st.markdown(f"**Predicted ({model_choice})**")
         if pred_path.exists():
-            st.image(Image.open(pred_path), use_column_width=True)
+            st.image(Image.open(pred_path), use_container_width=True)
         else:
             st.warning("Missing image")
             
     with c3:
         st.markdown("**Difference Heatmap**")
         if heat_path.exists():
-            st.image(Image.open(heat_path), use_column_width=True)
+            st.image(Image.open(heat_path), use_container_width=True)
         else:
             st.warning("Missing image")
 
@@ -222,12 +222,12 @@ def main():
     with ac1:
         st.markdown("**Baseline Animation**")
         if anim_base.exists():
-            st.image(str(anim_base), use_column_width=True)
+            st.image(str(anim_base), use_container_width=True)
             
     with ac2:
         st.markdown("**Fine-Tuned Animation**")
         if anim_ft.exists():
-            st.image(str(anim_ft), use_column_width=True)
+            st.image(str(anim_ft), use_container_width=True)
 
 
 if __name__ == "__main__":
